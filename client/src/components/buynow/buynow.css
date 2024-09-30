@@ -16,7 +16,7 @@
 .buynow_container .left_buy{
     flex: .7;
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 0px 20px;
     border-radius: 2px;
 }
 
@@ -135,6 +135,7 @@
     font-size: 12px;
     font-weight: 500;
     margin-top: 20px;
+    margin-bottom: -10px;
 }
 
 .buynow_container .right_buy .cost_right h3{
