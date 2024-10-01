@@ -3,7 +3,7 @@ const productsData = require("./constant/productsdata");
 
 const DefaultData = async() => {
     try{
-        // await ProductsSchema.deleteMany({})
+        await ProductsSchema.deleteMany({})
         const storeData = await ProductsSchema.insertMany(productsData)
         console.log(storeData); 
     }catch (error) {

@@ -14,7 +14,7 @@ router.get("/getproducts", async(req,res) => {
 })
 
 //get individual data
-router.get("/getproductsone/:id", async(req,res) => {
+router.get("/getproductsone/:pid", async(req,res) => {
     try {
         const {pid} = req.params;
         // console.log(id);
