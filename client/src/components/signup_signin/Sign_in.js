@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import './signup.css'
 import amazonlogo from '../../images/blacklogoamazon.png'
 import { NavLink } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Sign_in = () => {
 
@@ -9,9 +11,6 @@ const Sign_in = () => {
     email:  "",
     password: ""
   })
-
-  console.log(logdata);
-  
 
   const addData = (e) => {
     const { name,value } = e.target;
@@ -24,6 +23,47 @@ const Sign_in = () => {
     })
   }
 
+  const sendData = async(e) => {
+    e.preventDefault();
+    const { email, password } = logdata;
+    const jsondatalogin = JSON.stringify({
+      email, password
+    })
+   if(email === ""){
+      toast.error("Please give Your email id !",{
+        position: "top-center"
+      })
+    } else if(password === ""){
+      toast.error("Please write your password !",{
+        position: "top-center"
+      })
+    } else {
+      
+    }
+    
+    const data = await fetch("http://localhost:8080/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: jsondatalogin
+    });
+
+    const res = await data.json();
+    console.log(res);
+
+    if(data.status === 422 || !data){
+      toast.error("No Data added !",{
+        position: "top-center",
+      })
+    }else{
+      toast.success("Logged IN !",{
+        position: "top-center",
+      })
+      setData({...logdata,email:"",password:""})
+    }
+  }
+
   return (
     <>
       <section>
@@ -32,7 +72,7 @@ const Sign_in = () => {
             <img src={amazonlogo} alt="amazonlogo" />
           </div>
           <div className='sign_form'>
-            <form>
+            <form method='POST'>
               <h1>Sign In</h1>
               <div className='form-data'>
                 <label htmlFor="email">Email</label>
@@ -53,7 +93,7 @@ const Sign_in = () => {
                 id="password" 
                  />
               </div>
-              <button className='signin_btn'>Continue</button>
+              <button className='signin_btn' onClick={sendData}>Continue</button>
             </form>
           </div>
           <div className='create_accountinfo'>

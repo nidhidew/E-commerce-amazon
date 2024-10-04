@@ -7,8 +7,10 @@ const Products = require("./models/productsSchema.js")
 const DefaultData = require("./defaultdata.js")
 const cors = require("cors")
 const router = require("./routes/router.js")
+const cookieParser = require("cookie-parser")
 
 app.use(express.json());
+app.use(cookieParser(""));
 app.use(cors());
 app.use(router);
 

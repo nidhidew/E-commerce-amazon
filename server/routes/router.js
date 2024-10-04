@@ -2,6 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const Products = require("../models/productsSchema")
 const USER = require("../models/userSchema")
+const bcrypt =  require("bcrypt")
 
 //get product data api
 router.get("/getproducts", async(req,res) => {
@@ -55,6 +56,47 @@ router.post("/register", async(req,res) => {
         }
     } catch (error) {
         console.log("error with registration ",error)
+    }
+})
+
+//api for user login 
+
+router.post("/login",async(req,res) => {
+    const {email,password} = req.body;
+
+    if(!email || !password){
+        res.status(400).json({error:"fill all the data"})
+    };
+
+    try {
+        const userlogin = await USER.findOne({email: email});
+        console.log("userlogin ",userlogin);
+
+        if(userlogin){
+            const isEmailMatch = userlogin.email;
+            console.log("isEmailMatched? ",isEmailMatch);
+            const isPasswordMatch =  await bcrypt.compare(password,userlogin.password);
+            console.log("isPasswordMatched? ",isPasswordMatch);
+            
+            //generate token
+            const token = await userlogin.generateAuthtoken();
+            console.log(token);
+            
+            res.cookie("Amazonweb",token,{
+                expires: new Date(Date.now() + 900000),
+                httpOnly: true
+            })
+
+            if(!isPasswordMatch){
+                res.status(400).json({error:"password are not matched"})
+            }else if(!isEmailMatch){
+                res.status(400).json({error:"email are not matched"})
+            }else{
+                res.status(201).json({success:"password and email are matched"})
+            }
+        }
+    } catch (error) {
+        res.status(400).json({error: "invalid details"})
     }
 })
 module.exports = router;
