@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './buynow.css'
 import { Divider } from '@mui/material'
 import Option from './Option'
@@ -6,6 +6,33 @@ import Subtotal from './Subtotal'
 import Right from './Right'
 
 const Buynow = () => {
+
+  const [cartdata,setCartdata] = useState("")
+  console.log(cartdata);
+  
+  const getDataBuy = async() => {
+    const res = await fetch(`http://localhost:8080/cartdetails`,{
+      method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if(res.status !== 201){
+      console.log("error")
+    }else{
+      setCartdata(data)
+    }
+  }
+
+  useEffect(() => {
+    getDataBuy();
+  },[])
+
   return (
     <div className='buynow_section'>
       <div className='buynow_container'>

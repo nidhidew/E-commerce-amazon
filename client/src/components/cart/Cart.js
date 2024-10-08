@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./cart.css";
 import { Divider } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { LoginContext } from "../context/ContextProvider";
 
 const Cart = () => {
   const { id } = useParams("");
-  // console.log(id);
+  var {account,setAccount} = useContext(LoginContext)
+  const history = useNavigate("")
   const [inddata, setInddata] = useState({});
-  // console.log(inddata);
 
   const getinddata = async () => {
 
@@ -48,12 +49,14 @@ const Cart = () => {
       });
 
       const data1 = await checkres.json();
-      console.log(data1 + " frontend data");
+      console.log("data added in cart ",data1);
 
       if (checkres.status === 401 || !data1) {
         console.log("user invalid");
       } else {
-        console.log("data added in your cart");
+        console.log("data added in your cart ",data1);
+        history("/buynow")
+        setAccount(data1)
       }
     } catch (error) {
       console.error("Error fetching data for adding product in cart:", error);
@@ -62,6 +65,7 @@ const Cart = () => {
 
   return (
     <div className="cart_section">
+    {inddata && Object.keys(inddata).length &&
       <div className="cart_container">
         <div className="left_cart">
           <img src={inddata.detailUrl} alt="cart_img" />
@@ -73,23 +77,22 @@ const Cart = () => {
           </div>
         </div>
         <div className="right_cart">
-          <h3>{inddata.title?.shortTitle || "Loading Title..."}</h3>
-          <h4>{inddata.title?.longTitle || "Loading Title"}</h4>
+          <h3>{inddata.title.shortTitle}</h3>
+          <h4>{inddata.title.longTitle}</h4>
           <Divider />
-          <p className="mrp">₹{inddata.price?.mrp || "Loading Price..."}</p>
+          <p className="mrp">₹{inddata.price.mrp}</p>
           <p className="">
             Deal of the Day{" "}
             <span style={{ color: "#B12704" }}>
-              ₹{inddata.price?.cost || "Loading Price..."}
+              ₹{inddata.price.cost}
             </span>
           </p>
           <p className="">
             You save{" "}
             <span style={{ color: "#B12704" }}>
               ₹
-              {inddata.price?.mrp - inddata.price?.cost ||
-                "Loading Discount..."}{" "}
-              (-{inddata.price?.discount || "Loading Percentage Discount... "})
+              {inddata.price.mrp - inddata.price.cost}{" "}
+              (-{inddata.price.discount})
             </span>
           </p>
 
@@ -124,6 +127,7 @@ const Cart = () => {
           </p>
         </div>
       </div>
+    }
     </div>
   );
 };

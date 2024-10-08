@@ -70,7 +70,8 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
+  console.log("requested body ",req.body);
+  
   if (!email || !password) {
     res.status(400).json({ error: "fill all the data" });
   }
@@ -135,5 +136,17 @@ router.post("/addcart/:id", authenticate, async (req, res) => {
     res.status(401).json({ error: "Invalid user(in catch block)" });
   }
 });
+
+//get Cart details
+
+router.get("/cartdetails", authenticate,async(req,res)=>{
+  try {
+    const buyuser = await USER.findOne({_id: req.userID})
+    console.log(buyuser);
+    res.status(201).json(buyuser);
+  } catch (error) {
+    console.log("error in buynow page "+error)
+  }
+})
 
 module.exports = router;

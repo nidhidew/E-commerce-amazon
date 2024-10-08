@@ -46,7 +46,8 @@ const Sign_in = () => {
       headers: {
         "Content-Type": "application/json"
       },
-      body: jsondatalogin
+      body: jsondatalogin,
+      credentials: 'include'
     });
 
     const res = await data.json();
