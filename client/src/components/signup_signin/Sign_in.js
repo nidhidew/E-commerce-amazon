@@ -38,7 +38,7 @@ const Sign_in = () => {
         position: "top-center"
       })
     } else {
-      
+      // window.location.href = "http://localhost:3000/"
     }
     
     const data = await fetch("http://localhost:8080/login", {
@@ -95,6 +95,7 @@ const Sign_in = () => {
               </div>
               <button className='signin_btn' onClick={sendData}>Continue</button>
             </form>
+            <ToastContainer />
           </div>
           <div className='create_accountinfo'>
             <p>New To Amazon</p>

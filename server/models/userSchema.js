@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema({
     carts : Array
 });
 
+//password hasing
 userSchema.pre("save", async function (next) {
     if(this.isModified("password")){
         this.password = await bcrypt.hash(this.password, 12);
@@ -59,12 +60,24 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.generateAuthtoken = async function () {
     try {
-        let token = jwt.sign({_id:this._id},secretKey);
+        let token = jwt.sign({_id:this._id},secretKey); //generating token
         this.tokens = this.tokens.concat({token: token});
         await this.save();
         return token;
     } catch (error) {
         console.log(error);        
+    }
+}
+
+//add to cart data
+
+userSchema.methods.addcartdata = async function(cart){
+    try {
+        this.carts = this.carts.concat(cart);
+        await this.save();
+        return this.carts        
+    } catch (error) {
+        console.log(error);
     }
 }
 

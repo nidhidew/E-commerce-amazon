@@ -3,6 +3,7 @@ const router = new express.Router();
 const Products = require("../models/productsSchema")
 const USER = require("../models/userSchema")
 const bcrypt =  require("bcrypt")
+const authenticate = require("../middleware/authenticate")
 
 //get product data api
 router.get("/getproducts", async(req,res) => {
@@ -70,7 +71,7 @@ router.post("/login",async(req,res) => {
 
     try {
         const userlogin = await USER.findOne({email: email});
-        console.log("userlogin ",userlogin);
+        // console.log("userlogin ",userlogin);
 
         if(userlogin){
             const isEmailMatch = userlogin.email;
@@ -80,8 +81,8 @@ router.post("/login",async(req,res) => {
             
             //generate token
             const token = await userlogin.generateAuthtoken();
-            console.log(token);
-            
+            console.log("token ",token);
+            console.log("");
             res.cookie("Amazonweb",token,{
                 expires: new Date(Date.now() + 900000),
                 httpOnly: true
@@ -99,4 +100,31 @@ router.post("/login",async(req,res) => {
         res.status(400).json({error: "invalid details"})
     }
 })
+
+//adding the data into cart
+
+router.post("/addcart/:id",authenticate,async(req,res) => {
+    try{
+        console.log("requested value ",req);
+        const {id} = req.params;
+        const cart = await Products.findOne({id:id});
+        console.log(cart + "cart value");
+
+        const UserContact = await USER.findOne({_id:req.userID});
+        console.log(UserContact);
+        
+        if(UserContact){
+            const cartData = await UserContact.addcartdata(cart);
+            await UserContact.save();
+            console.log(cartData);
+            res.status(201).json(UserContact);
+        }else{
+            console.log
+            res.status(401).json({error:"Invalid user(in try block)"});
+        }
+    }catch(error){
+        res.status(401).json({error:"Invalid user(in catch block)"});
+    }
+})
+
 module.exports = router;
