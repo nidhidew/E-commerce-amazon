@@ -52,7 +52,7 @@ const Navbar = () => {
           </div>
           <div>
           {
-            account ? <Avatar className="avtar">{account.fname[0].toUpperCase()}</Avatar>:
+            account ? <Avatar className="avtar2">{account.fname[0].toUpperCase()}</Avatar>:
             <Avatar className="avtar"></Avatar>
           }
             
