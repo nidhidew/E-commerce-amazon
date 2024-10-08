@@ -3,6 +3,9 @@ const USER = require("../models/userSchema")
 const secretKey = process.env.KEY;
 
 const authenticate = async(req,res,next) => {
+    console.log("")
+    console.log("Authenticate middleware....")
+    console.log("cookie ",req.cookies)
     try {
         const token = req.cookies.Amazonweb;
 

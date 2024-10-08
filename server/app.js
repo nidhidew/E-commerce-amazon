@@ -10,8 +10,12 @@ const router = require("./routes/router.js")
 const cookieParser = require("cookie-parser")
 
 app.use(express.json());
-app.use(cookieParser(""));
-app.use(cors());
+app.use(cookieParser());
+// app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    credentials: true
+}));
 app.use(router);
 
 const port = 8080;
