@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import './signup.css'
 import amazonlogo from '../../images/blacklogoamazon.png'
 import { NavLink } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoginContext } from '../context/ContextProvider';
 
 const Sign_in = () => {
 
@@ -11,6 +12,7 @@ const Sign_in = () => {
     email:  "",
     password: ""
   })
+  const { account, setAccount } = useContext(LoginContext);
 
   const addData = (e) => {
     const { name,value } = e.target;
@@ -38,7 +40,7 @@ const Sign_in = () => {
         position: "top-center"
       })
     } else {
-      // window.location.href = "http://localhost:3000/"
+      window.location.href = "http://localhost:3000/"
     }
     
     const data = await fetch("http://localhost:8080/login", {
@@ -58,6 +60,7 @@ const Sign_in = () => {
         position: "top-center",
       })
     }else{
+      setAccount(data)
       toast.success("Logged IN !",{
         position: "top-center",
       })

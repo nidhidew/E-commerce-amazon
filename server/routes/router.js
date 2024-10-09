@@ -149,4 +149,36 @@ router.get("/cartdetails", authenticate,async(req,res)=>{
   }
 })
 
+//get valid user
+
+router.get("/validateuser", authenticate,async(req,res)=>{
+  try {
+    const getvaliduser = await USER.findOne({_id: req.userID})
+    console.log("getvaliduser ",getvaliduser);
+    res.status(201).json(getvaliduser);
+  } catch (error) {
+    console.log("error in buynow page "+error)
+  }
+})
+
+// remove product from cart
+
+router.delete("/remove/:id",authenticate,async(req,res)=>{
+  try {
+    const {id} = req.params;
+
+    req.rootUser.carts = req.rootUser.carts.filter((cruval) => {
+      return cruval.id != id;
+    });
+    
+    req.rootUser.save();
+    res.status(201).json(req.rootUser);
+    console.log("item remove");
+    
+  } catch (error) {
+    console.log("error in delete api ",error)
+    res.status(400).json(req.rootUser);
+  }
+})
+
 module.exports = router;

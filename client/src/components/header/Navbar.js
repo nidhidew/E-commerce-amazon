@@ -1,4 +1,4 @@
-import { React, useContext } from "react";
+import { React, useContext, useEffect } from "react";
 import "./navbar.css";
 import amazonlogo from "../../images/amazon_PNG25.png";
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,7 +11,31 @@ import { LoginContext } from "../context/ContextProvider";
 const Navbar = () => {
 
   const { account, setAccount } = useContext(LoginContext);
-  console.log(account);
+  // console.log(account);
+
+  const getdetailvaliduser = async() => {
+    const res = await fetch("http://localhost:8080/validateuser", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+      credentials: "include",
+    });
+    
+    // Check if response is OK before parsing as JSON
+    if (!res.ok) {
+      console.error(`Server error: ${res.status}`);
+    } else {
+      const data = await res.json();
+      console.log("getdetailuser data", data);
+      setAccount(data)
+    }
+     
+  }
+
+  useEffect(() => {
+    getdetailvaliduser()
+  },[])
 
   return (
     <header>
