@@ -40,7 +40,7 @@ const Sign_in = () => {
         position: "top-center"
       })
     } else {
-      window.location.href = "http://localhost:3000/"
+      // window.location.href = "http://localhost:3000/"
     }
     
     const data = await fetch("http://localhost:8080/login", {
