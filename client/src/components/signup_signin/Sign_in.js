@@ -65,6 +65,7 @@ const Sign_in = () => {
         position: "top-center",
       })
       setData({...logdata,email:"",password:""})
+      window.location.href = "http://localhost:3000/"
     }
   }
 
